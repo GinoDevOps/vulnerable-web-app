@@ -1,0 +1,16 @@
+name: Building
+
+on:
+    push:
+        branches:
+            - master
+
+jobs: 
+
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/node
+            - run: npm install
+            - run: npm run build
