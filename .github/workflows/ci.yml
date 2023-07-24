@@ -1,0 +1,96 @@
+name: CI
+on:
+  push:
+    branches:
+    - feature/*
+    - master
+    
+  pull_request:
+    branches:
+    - develop
+    - master
+        
+jobs:
+  Scan-Dependencies-Trivy:
+    name: Scan-Dependencies
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run Trivy vulnerability scanner in fs mode
+      uses: aquasecurity/trivy-action@master
+      with:
+        format: 'sarif'
+        scan-type: 'fs'
+        vuln-type: 'library'
+        scan-ref: '.'
+        severity: 'MEDIUM,CRITICAL,HIGH'
+        output: 'trivy-results.sarif'    
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+
+  Scan-Dependencies-Njsscan:
+    runs-on: ubuntu-latest
+    name: Scan-Dependencies-Njsscan
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v3
+    - name: nodejsscan scan
+      id: njsscan
+      uses: ajinabraham/njsscan-action@master
+      with:
+        args: '. --sarif --output results.sarif || true'
+    - name: Upload njsscan report
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+            sarif_file: results.sarif
+  
+  Scan-Secrets:
+    name: Scan-Secrets
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: gitleaks-action
+      uses: zricethezav/gitleaks-action@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      
+    - name: Upload Gitleaks scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+            sarif_file: 'results.sarif'
+
+  Scan-Image:
+    name: Scan_Image
+    runs-on: ubuntu-20.04
+    needs: [Scan-Dependencies-Trivy,Scan-Secrets,Scan-Dependencies-Njsscan]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Build an image from Dockerfile
+      run: |
+                docker build -t salarcon30/vulnerable-web-app:${{ github.sha }} .
+                
+    - name: Run Trivy vulnerability scaner in image mode
+      uses: aquasecurity/trivy-action@master
+      with:
+            format: 'sarif'
+            image-ref: 'salarcon30/vulnerable-web-app:${{ github.sha }}'
+            vuln-type: 'os,library'
+            scan-type: 'image'
+            severity: 'MEDIUM,CRITICAL,HIGH'
+            output: 'trivy-results.sarif'
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+            sarif_file: 'trivy-results.sarif'
