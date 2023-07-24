@@ -3,10 +3,11 @@ on:
   push:
     branches:
     - feature/*
-    - main
+    
   pull_request:
     branches:
     - develop
+    - main
         
 jobs:
   Scan-Dependencies-Trivy:
