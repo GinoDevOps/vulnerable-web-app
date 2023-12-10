@@ -1,0 +1,35 @@
+<style>
+    .main{
+        font-family: "Lato-Lig";
+        width: 500px;
+        position: fixed;
+        left: 50%;
+        top: 60px;
+        margin-left: -250px;
+    }
+
+    .header-container{
+        
+    }
+</style>
+
+<div class="main"> 
+    <div class="header-container">
+        <h1>EkoParty Hackademy-Archenzio Vulnerable Web App</h1>
+        <h3>Cada Link contiene vulnerabilidades intencionalmente. Juega con cada uno para tener una idea de cómo funcionan.</h3>
+    </div>
+    <br> 
+    <ul> 
+        <li><a href="/reflected_xss?foobar=Hello%20world!">Reflected XSS Example 1</a></li>
+        <li><a href="/reflected_xss_2?foo=bar">Reflected XSS Example 2</a></li>
+        <li><a href="/reflected_xss_3?foo=bar">Reflected XSS Example 3</a></li>
+        <li><a href="/stored_xss">Stored XSS Example</a></li>
+        <li><a href="/csrf">CSRF Example</a></li>
+        <li><a href="/fuzzing/fuzz.html">Fuzzing</a></li>
+        <li><a href="/auth_bypass">Authentication Bypass</a></li>
+        <li><a href="/views/directory_traversal.html">Directory Traversal</a></li>
+        <li><a href="/private_pages/123/document.html">Insecure Direct Object Reference (IDOR)</a></li>
+        <li><a href="/rce">Injections and remote code execution</a></li>
+        <li><a href="/general?foo=a">Mixed topics</a></li>
+    </ul>
+</div>
