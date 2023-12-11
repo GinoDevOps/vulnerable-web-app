@@ -1,0 +1,16 @@
+This form changes your bank account number! Any payments you receive through this site will be sent to this account number- if an attacker could figure out how to change it, your payments would be sent to them instead.
+
+<br><br>
+
+<form action="/csrf" method="POST">
+    <input name="account_number" placeholder="Change your account #">
+    <input type="submit">
+</form>
+
+<br><br>
+Your current account number is: {{account_number}}
+
+<br><br><br>
+If you're stuck, visit this codepen page. It uses a valid CSRF attack, and will change your account number the moment you load the page:
+<br><br>
+<a href="http://codepen.io/anon/pen/XXgeqP" target="blank">http://codepen.io/anon/pen/XXgeqP</a>
