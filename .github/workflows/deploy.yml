@@ -13,6 +13,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+#      - name: Set up Node.js
+#       uses: actions/setup-node@v2
+#        with:
+#          node-version: '14'  # Ajusta la versión de Node.js según tu proyecto
+#  
+#      - name: Install dependencies
+#        run: npm install
+#
+#      - name: Run SonarQube analysis
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Añade tu token de SonarQube como un secreto en GitHub
+#        run: |
+#          npx sonar-scanner \
+#            -Dsonar.projectKey=your_project_key \
+#            -Dsonar.organization=your_organization \
+#            -Dsonar.sources=. \
+#            -Dsonar.host.url=https://sonarcloud.io \
+#            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
       - name: Login to Heroku Container Registry
         run: echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com
 
