@@ -12,6 +12,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        
+      - name: Run SonarQube analysis
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
 #      - name: Set up Node.js
 #       uses: actions/setup-node@v2
@@ -31,7 +37,7 @@ jobs:
 #            -Dsonar.sources=. \
 #            -Dsonar.host.url=https://sonarcloud.io \
 #            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
+      
       - name: Login to Heroku Container Registry
         run: echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com
 
